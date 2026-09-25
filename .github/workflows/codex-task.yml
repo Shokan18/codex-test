@@ -1,0 +1,57 @@
+name: Выполнить с ИИ
+
+on:
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: "Что нужно изменить в codex-test.html?"
+        required: true
+        type: string
+
+jobs:
+  edit-site:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Проверить ключ OpenAI
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo "::error::Добавьте OPENAI_API_KEY в Settings → Secrets and variables → Actions"
+            exit 1
+          fi
+
+      - name: Выполнить задачу с Codex
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          sandbox: workspace-write
+          prompt: |
+            Выполни задачу в этом репозитории: ${{ inputs.prompt }}
+
+            Для этого теста изменяй только codex-test.html.
+            Не меняй workflow, настройки или секреты.
+            Проверь итоговое содержимое файла.
+
+      - name: Сохранить результат в репозитории
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git diff --quiet -- codex-test.html; then
+            echo "::notice::Codex не изменил codex-test.html"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- codex-test.html
+          git commit -m "Codex: выполнить задачу из формы"
+          auth="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $auth" push origin HEAD:main
