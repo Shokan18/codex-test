@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI тапсырма</title>
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+            background: #f3f5f9;
+            font-family: Arial, sans-serif;
+            color: #172033;
+        }
+
+        .card {
+            width: min(100%, 600px);
+            padding: 32px;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 12px 40px rgba(20, 35, 60, .08);
+        }
+
+        h1 { margin: 0 0 8px; font-size: 26px; }
+        p { margin: 0 0 24px; color: #667085; line-height: 1.5; }
+        label { display: block; margin-bottom: 10px; font-weight: 600; }
+
+        textarea {
+            width: 100%;
+            min-height: 160px;
+            padding: 14px;
+            border: 1px solid #d0d5dd;
+            border-radius: 10px;
+            resize: vertical;
+            font: inherit;
+            line-height: 1.5;
+        }
+
+        textarea:focus {
+            outline: 2px solid #635bff;
+            border-color: transparent;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 16px;
+            padding: 14px 20px;
+            border: 0;
+            border-radius: 10px;
+            background: #635bff;
+            color: #fff;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        button:hover { background: #5148dc; }
+        button:disabled { opacity: .6; cursor: wait; }
+
+        .result {
+            display: none;
+            margin-top: 18px;
+            padding: 14px;
+            border-radius: 10px;
+            background: #f2f4f7;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .result.show { display: block; }
+        .result.error { background: #fff1f0; color: #b42318; }
+    </style>
+</head>
+<body>
+    <main class="card">
+        <h1 id="title">Тапсырма орындалды</h1>
+        
+    </main>
+
+</body>
+</html>
